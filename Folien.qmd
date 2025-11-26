@@ -2,13 +2,24 @@
 title: "Zero-Shot mit OpenAI API Mini-Workshop"  
 subtitle: "Primer Mini-Workshop"
 author: "Gregor Willenbrock"
-format: tud-slides
+format: tud-slides-beamer
 lang: "de"
 date: today
 date-format: "DD. MM. YYYY"
 institute: "TUD IfK"
+filters:
+  - apa_and_amp
+bibliography: main.bib
+csl: https://www.zotero.org/styles/apa
+citeproc: false 
 ---
 
 
 
 
+# Hallo
+
+- Ich denke @masurComputationalAnalysisDigital2024 ist top.
+
+
+# Quellen
