@@ -2,24 +2,144 @@
 title: "Zero-Shot mit OpenAI API Mini-Workshop"  
 subtitle: "Primer Mini-Workshop"
 author: "Gregor Willenbrock"
-format: tud-slides-beamer
+format: 
+    tud-slides-beamer: 
+        section-titles: true
+        block-headings: false
 lang: "de"
-date: today
-date-format: "DD. MM. YYYY"
+date: 12.02.2025
+date-format: "DD.MM.YYYY"
 institute: "TUD IfK"
 filters:
   - apa_and_amp
 bibliography: main.bib
 csl: https://www.zotero.org/styles/apa
-citeproc: false 
+citeproc: false
+
 ---
 
 
 
 
-# Hallo
+# Bisheriges Vorgehen bei automatischer Textklassifikation (ohne llms)
 
-- Ich denke @masurComputationalAnalysisDigital2024 ist top.
+## Diktionärsbasierte Ansätze
+
+![](img/dictonary_based_classification.png){height="80%"}
+
+Abbildung von @masurComputationalAnalysisDigital2024.
 
 
-# Quellen
+## Supervised Textklassifikation
+
+![](img/masur_supervised_text_classification.png){height="79%"}
+
+Abbildung von @masurComputationalAnalysisDigital2024.
+
+## Klassifikation mit Word Embeddings (Pretrained Models)
+
+![](img/CLASSIFICATION%20WITH%20WORD-EMBEDDINGS.png){height="79%"}
+
+Abbildung von @masurComputationalAnalysisDigital2024.
+
+# Jetzt: Klassifikationen direkt mit LLMs
+
+## Klassifikation mit LLMs
+
+![](img/llmbased-classification.png){height="79%"}
+
+Abbildung von @masurComputationalAnalysisDigital2024.
+
+## Arten von "Promptengineering"
+
+![](img/masur_table_zero_few.png)
+
+Abbildung von @masurComputationalAnalysisDigital2024.
+
+## Qualität der Codierung (im Vergleich zur menschlichen)
+
+- Schwierige Studienlage: Viele Preprints, häufig alte Modelle und hauptsächlich OpenAI-zentriert [vgl. auch @ollionChatGPTTextAnnotation2023]
+-  Qualität variiert, aber häufig akzeptabel
+    - `gpt4-turbo` Crohnbachs $\alpha = .78$ bei @pilnyManualMachineAssessing2024
+    - `gpt4-turbo` bei unterschiedlichen Klassifikationsaufgaben (bspw. Likert-Skala zum Vorhandensein unterschiedlicher Emotionen) in unterschiedlichen Sprachen durchschnittlich eine $Accuracy$ von .682 [@rathjeGPTEffectiveTool2024]
+-  Meistens besser als andere Machine-Learning-Ansätze
+    - GPT (`gpt4-turbo`) übertrifft die Genauigkeit von Dictionary-Methoden [@rathjeGPTEffectiveTool2024; @ollionChatGPTTextAnnotation2023]
+    - `gpt4-turbo` funktioniert gut mit Zero-Shot, allerdings ist es nicht unbedingt besser als fine-tuned Modelle wie BERT. [@rathjeGPTEffectiveTool2024; @kristensen-mclachlanAreChatbotsReliable2025]
+-  Interne Konsistenz ist stark abhängig vom Prompt (auch bei kleinen Änderungen wie z.B. "classify" vs. "rate") [@reissTestingReliabilityChatGPT2023] und vom Inhalt/Kontext des zu codierenden Materials [@gielensGoodbyeHumanAnnotators2025]
+
+## Ethische Bedenken zur Codierung mit LLMs
+
+- Im Fazit der Studien ist häufig eine Warnung vor unreflektierter/ unkontrollierter Nutzung, aber keine Warnung vor der Nutzung per se zu finden [@gielensGoodbyeHumanAnnotators2025; @ollionChatGPTTextAnnotation2023; @tornbergBestPracticesText2024]
+
+- OpenAI (und ähnliche Anbieter) nutzt Eingaben fürs weitere Training: Problematisch bei sensiblen, privaten oder urheberrechtlich geschützten Daten  [@ollionChatGPTTextAnnotation2023; @rathjeGPTEffectiveTool2024; vgl. auch @spirlingWhyOpensourceGenerative2023]
+
+- Laufende Modellanpassungen erschweren Replizierbarkeit, später ggf. auch Reproduzierbarkeit [@kristensen-mclachlanAreChatbotsReliable2025]
+
+- Modellbias bleibt eine schwer absehbare zusätzliche Problemdimension [bspw. @guptaBiasRunsDeep2023]
+
+::: {.callout-note}
+#### FOSS als Lösung
+Nach @spirlingWhyOpensourceGenerative2023 können offene Modelle diese Bedenken aus dem Weg räumen. Notwendige Ressourcen: Hardwareinfrastruktur und Know-how.
+:::
+
+
+
+## @gielensGoodbyeHumanAnnotators2025: *"Goodbye human annotators? Content analysis of social policy debates using ChatGPT"* {.allowframebreaks}
+
+::: {.callout-note icon=false}
+#### System Prompt
+> Persona: You are a professional researcher named Jakub. You are an expert on qualitative content analysis. You are always focussed and rigorous.  Task Description: Analyse [language] [document_type] for arguments related to [policy_name]. [policy_description]. The analysis will identify whether [document_type] contain arguments for or against [policy_name].
+:::
+
+::: {.callout-note icon=false appearance="simple"}
+
+> For each [document_type], provide a classification for each argument in an HTML table. Do not include the text of the [document_type] in the table. Only report the classification values. The HTML table has 5 rows, one per [document_type]. The HTML table has 10 columns, one per argument. The elements of the table are "0" and "1". Indicate "1" if the [document_type] discusses aspects of the specified argument and "0" is the [document_type] does not discuss the specific argument. Here is an example of the required output format: [example_output]
+:::
+
+::: {.callout-note icon=false}
+#### User Prompt
+> Determine whether a [document_type] discusses each of the following ten arguments: [[arguments]] [document_type] contain an argument if the author opposes the argument and also when the author argues in favour of the argument. [policy_name] need not be mentioned explicitly in the [document_type] to relate to the argument. A [document_type] can discuss more than one argument. You will now be provided with 5 [document_type] separated by a new line. [[documents]]
+:::
+
+
+![Gesamtgüte](img/overall_gielens.png){height="100px"}
+
+- **Accuracy** = (TN +TP) / (TN +TP + FN + FP) = Anteil aller korrekt klassifizierten Fälle (positiv und negativ) an allen Fällen
+- **Precision** = TP / (TP+FP) = Anteil der als positiv klassifizierten Fälle, die wirklich positiv sind
+- **Recall/Sensitivität** = TP / (TP+FN) = Anteil der tatsächlich positiven Fälle, die korrekt als positiv erkannt wurden
+
+
+
+
+
+
+
+![Güte nach Argument](img/topic_gielens.png){height="150px"}
+
+
+
+# Qualität der Codierung (im Vergleich zur Ground Truth)
+
+## @tornbergLargeLanguageModels2025: *"[llms] Outperform Expert Coders and Supervised Classifiers at Annotating Political Social Media Messages"*  {.allowframebreaks}
+
+- Aufgabe: Tweets von US-Parlamentarier:innen nach der politischen Zugehörigkeit der Verfassenden codieren.  
+-  Daten aus einer bestehenden Datenbank, in der die Parteizugehörigkeit bekannt ist ("ground truth").  
+-  GPT-4 objektiv mit menschlichen Codierenden und alternativen ML-Methoden vergleichen.  
+-  Komplexes Material:  
+    - leicht einordenbare Parteipropaganda oder Angriffe auf Gegner  
+    - Botschaften, deren Intention und Zielpublikum interpretiert werden müssen  
+    - inhaltlich neutrale oder private Nachrichten, die politisch kaum zuordenbar sind  
+
+
+![@tornbergLargeLanguageModels2025: Accuracy im Modellvergleich mit 95%-Konfidenzintervall.](img/tornberg2025.png){height="150px"}
+
+
+
+
+## Weiter ins Thema 
+
+- Fine-Tuning (open-source) llms: @alizadehOpensourceLLMsText2025
+- Model Bias: @guptaBiasRunsDeep2023
+- Zero-shot Best Practices: @tornbergBestPracticesText2024
+
+## Quellen {.allowframebreaks}
