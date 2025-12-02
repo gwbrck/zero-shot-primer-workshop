@@ -1,6 +1,6 @@
 ---
-title: "Zero-Shot mit OpenAI API Mini-Workshop"  
-subtitle: "Primer Mini-Workshop"
+title: "Mini-Workshop: Zero-Shot mit der OpenAI-API"  
+subtitle: "Primer für Zero-Shot-Klassifikation mit llms"
 author: "Gregor Willenbrock"
 format: 
     tud-slides-beamer: 
@@ -9,7 +9,7 @@ format:
 lang: "de"
 date: 12.02.2025
 date-format: "DD.MM.YYYY"
-institute: "TUD IfK"
+institute: "Institut für Kommunikationswissenschaft"
 filters:
   - apa_and_amp
 bibliography: main.bib

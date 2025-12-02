@@ -10,6 +10,7 @@ library(jsonlite) # Arbeiten mit JSON: Ein-/Auslesen, Konvertieren zwischen JSON
 dotenv::load_dot_env()
 key <- Sys.getenv("API_KEY")
 
+
 # Build JSON schema for structured output (Structured Outputs)
 
 structured_output_format <- list(
@@ -50,8 +51,8 @@ req_test <- request("https://api.openai.com/v1/responses") |>
                 list(role = "user", content = comments[1])
             ),
             text = list(format = structured_output_format),
-            temperature = 0,
-            max_output_tokens = 500
+            temperature = 90,
+            max_output_tokens = 500,
             # andere Optionen: https://platform.openai.com/docs/api-reference/responses/create
         )
     )
@@ -78,7 +79,7 @@ req_list <- comments |>
                         list(role = "user", content = .x)
                     ),
                     text = list(format = structured_output_format),
-                    temperature = 0,
+                    temperature = 0.9,
                     max_output_tokens = 500
                     # andere Optionen: https://platform.openai.com/docs/api-reference/responses/create
                 )
@@ -107,3 +108,4 @@ resp_parsed <- resp_tbl |>
     unnest_wider(parsed)
 
 resp_parsed
+
