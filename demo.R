@@ -34,7 +34,7 @@ structured_output_format <- list(
 # Load instruction and comments
 instr <- paste(readLines("codieranweisung.txt", warn = FALSE, encoding = "UTF-8"),
                collapse = "\n")
-cod <- readLines("comments.txt", warn = FALSE, encoding = "UTF-8")
+comments <- readLines("comments.txt", warn = FALSE, encoding = "UTF-8")
 
 # Build request to /v1/responses
 
@@ -47,7 +47,7 @@ req_test <- request("https://api.openai.com/v1/responses") |>
             model = "gpt-5.1",
             input = list(
                 list(role = "system", content = instr),
-                list(role = "user", content = cod[1])
+                list(role = "user", content = comments[1])
             ),
             text = list(format = structured_output_format),
             temperature = 0,
@@ -64,7 +64,7 @@ resp_test_raw <- req_test |> req_perform()
 
 # resp_test_raw inszpezierbar mit fromJSON() und resp_body_json(resp_test_raw)
 
-req_list <- cod |>
+req_list <- comments |>
     map( ~ {
         request("https://api.openai.com/v1/responses") |>
             req_method("POST") |>
@@ -89,7 +89,7 @@ resp_list = req_list |>
     req_perform_parallel()
 
 
-resp_tbl <- tibble(input = cod, resp  = resp_list) |>
+resp_tbl <- tibble(input = comments, resp  = resp_list) |>
     mutate(
         body = map(resp, ~ resp_body_json(.x, simplifyVector = FALSE)),
         
