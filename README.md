@@ -6,9 +6,9 @@ This repository contains the material for the mini workshop **"Zero-Shot with th
 
 ## Repository contents
 
-- `Folien.qmd` / `Folien.pdf`: Quarto source file and exported slides of the workshop (German) with figures from masurp/VU_CADC
+- `Folien.qmd` / `Folien.pdf`: Quarto source file and exported slides of the workshop (German) including figures from https://github.com/masurp/VU_CADC
 - `demo.R`: R script containing an example workflow for zero-shot classification via the OpenAI API
-- `codieranweisung.txt`, comments.txt`: Example comments and instruction used for classification in the workshop (taken from bachl/methodenvl_ma)
+- `codieranweisung.txt`, comments.txt`: Example comments and instruction used for classification in the workshop (taken from https://github.com/bachl/methodenvl_ma)
 - `main.bib`: Bibliography file (BibTeX)
 
 ## Requirements
